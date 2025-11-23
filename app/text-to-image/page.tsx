@@ -65,28 +65,31 @@ export default function TextToImage() {
   }
 
   return (
-    <div className="min-h-screen bg-white/80 backdrop-blur-md">
-      <Header
-        onSettingsClick={() => {}}
-        onAboutClick={() => setShowAbout(true)}
-        isScrolled={headerScrolled}
-        title="Text to Image"
-        showBackButton={true}
-        subtitle="Generate images from text prompts"
-        hideSettings={true}
-      />
-
-      <main className="container mx-auto px-4 py-8">
-        <TextToImageForm
-          onSearch={handleSearch}
-          loading={loading}
-          searchAttempted={searchAttempted}
-          onSearchAttempt={() => setSearchAttempted(true)}
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-red-500/5 to-pink-500/5" />
+      <div className="relative z-10">
+        <Header
+          onSettingsClick={() => {}}
+          onAboutClick={() => setShowAbout(true)}
+          isScrolled={headerScrolled}
+          title="Text to Image"
+          showBackButton={true}
+          subtitle="Generate images from text prompts"
+          hideSettings={true}
         />
-        <ImageResults imageData={imageData} loading={loading} searchAttempted={searchAttempted} />
-      </main>
 
-      {showAbout && <AboutModal onClose={() => setShowAbout(false)} isTextToImage={true} />}
+        <main className="container mx-auto px-4 py-8">
+          <TextToImageForm
+            onSearch={handleSearch}
+            loading={loading}
+            searchAttempted={searchAttempted}
+            onSearchAttempt={() => setSearchAttempted(true)}
+          />
+          <ImageResults imageData={imageData} loading={loading} searchAttempted={searchAttempted} />
+        </main>
+
+        {showAbout && <AboutModal onClose={() => setShowAbout(false)} isTextToImage={true} />}
+      </div>
     </div>
   )
 }
