@@ -33,42 +33,42 @@ export default function Header({
   const renderHeaderIcon = () => {
     if (title === "Spotify Track Downloader") {
       return (
-        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg shadow-emerald-500/50">
+        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
           <Music className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
     if (title === "Text to Video") {
       return (
-        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/50">
+        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-500/30">
           <Video className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
     if (title === "Text to Voice") {
       return (
-        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/50">
+        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
           <Volume2 className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
     if (title === "Text to Image") {
       return (
-        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg shadow-orange-500/50">
+        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center shadow-lg shadow-pink-500/30">
           <ImageIcon className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
     if (title === "Terabox Downloader") {
       return (
-        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-green-500/50">
+        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
           <Download className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
     if (title === "Link to QR") {
       return (
-        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/50">
+        <div className="w-14 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
           <QrCode className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
@@ -96,14 +96,14 @@ export default function Header({
     <header
       className={`sticky top-0 z-40 transition-all duration-300 ${
         isScrolled
-          ? "bg-card/80 backdrop-blur-xl border-b border-border/50 shadow-lg"
-          : "bg-card/50 backdrop-blur-md border-b border-border/30"
+          ? "bg-white/90 backdrop-blur-xl border-b border-border shadow-sm"
+          : "bg-white/70 backdrop-blur-md border-b border-border/50"
       }`}
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {showBackButton && (
-            <Link href="/" className="p-2 hover:bg-muted rounded-xl transition-all duration-200 hover:scale-110">
+            <Link href="/" className="p-2 hover:bg-purple-50 rounded-xl transition-all duration-200 hover:scale-110">
               <ArrowLeft className="w-6 h-6 text-foreground" />
             </Link>
           )}
@@ -117,22 +117,22 @@ export default function Header({
         <div className="relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="p-2 hover:bg-muted rounded-xl transition-all duration-200 hover:scale-110"
+            className="p-2 hover:bg-purple-50 rounded-xl transition-all duration-200 hover:scale-110"
           >
             <Menu className="w-6 h-6 text-foreground" />
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 mt-2 w-48 bg-card/95 backdrop-blur-xl rounded-xl shadow-2xl border border-border overflow-hidden animate-fade-in">
+            <div className="absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-xl rounded-xl shadow-2xl shadow-purple-200/50 border border-border overflow-hidden animate-fade-in">
               {!hideSettings && (
                 <button
                   onClick={() => {
                     onSettingsClick()
                     setShowMenu(false)
                   }}
-                  className="w-full px-4 py-3 flex items-center gap-3 hover:bg-muted transition-all duration-200 text-left"
+                  className="w-full px-4 py-3 flex items-center gap-3 hover:bg-purple-50 transition-all duration-200 text-left"
                 >
-                  <Settings className="w-5 h-5 text-primary" />
+                  <Settings className="w-5 h-5 text-purple-600" />
                   <span className="text-foreground font-medium">Settings</span>
                 </button>
               )}
@@ -141,9 +141,9 @@ export default function Header({
                   onAboutClick()
                   setShowMenu(false)
                 }}
-                className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-muted transition-all duration-200 text-left ${!hideSettings ? "border-t border-border/50" : ""}`}
+                className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-purple-50 transition-all duration-200 text-left ${!hideSettings ? "border-t border-border/50" : ""}`}
               >
-                <Info className="w-5 h-5 text-primary" />
+                <Info className="w-5 h-5 text-purple-600" />
                 <span className="text-foreground font-medium">About</span>
               </button>
             </div>

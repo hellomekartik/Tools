@@ -66,7 +66,13 @@ export default function LinkToQr() {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5" />
+      <div className="absolute inset-0">
+        <div className="absolute top-20 right-20 w-96 h-96 bg-indigo-200/20 rounded-full blur-3xl animate-float-gentle" />
+        <div
+          className="absolute bottom-20 left-20 w-80 h-80 bg-purple-200/15 rounded-full blur-3xl animate-float-gentle"
+          style={{ animationDelay: "2s" }}
+        />
+      </div>
       <div className="relative z-10">
         <Header
           onSettingsClick={() => {}}

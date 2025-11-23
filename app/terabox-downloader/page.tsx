@@ -74,23 +74,32 @@ export default function TeraboxDownloader() {
   }
 
   return (
-    <div className="min-h-screen bg-white/80 backdrop-blur-md">
-      <Header
-        onAboutClick={() => setShowAbout(true)}
-        onSettingsClick={() => {}}
-        isScrolled={headerScrolled}
-        title="Terabox Downloader"
-        showBackButton={true}
-        subtitle="Download files from Terabox links"
-        hideSettings={true}
-      />
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute top-20 right-20 w-96 h-96 bg-emerald-200/20 rounded-full blur-3xl animate-float-gentle" />
+        <div
+          className="absolute bottom-20 left-20 w-80 h-80 bg-teal-200/15 rounded-full blur-3xl animate-float-gentle"
+          style={{ animationDelay: "2s" }}
+        />
+      </div>
+      <div className="relative z-10">
+        <Header
+          onAboutClick={() => setShowAbout(true)}
+          onSettingsClick={() => {}}
+          isScrolled={headerScrolled}
+          title="Terabox Downloader"
+          showBackButton={true}
+          subtitle="Download files from Terabox links"
+          hideSettings={true}
+        />
 
-      <main className="container mx-auto px-4 py-8">
-        <TeraboxForm onSearch={handleSearch} loading={loading} />
-        <TeraboxResults teraboxData={teraboxData} loading={loading} searchAttempted={searchAttempted} error={error} />
-      </main>
+        <main className="container mx-auto px-4 py-8">
+          <TeraboxForm onSearch={handleSearch} loading={loading} />
+          <TeraboxResults teraboxData={teraboxData} loading={loading} searchAttempted={searchAttempted} error={error} />
+        </main>
 
-      {showAbout && <AboutModal onClose={() => setShowAbout(false)} isTerabox={true} />}
+        {showAbout && <AboutModal onClose={() => setShowAbout(false)} isTerabox={true} />}
+      </div>
     </div>
   )
 }

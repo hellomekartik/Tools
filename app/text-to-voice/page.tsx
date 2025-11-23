@@ -77,28 +77,38 @@ export default function TextToVoice() {
   }
 
   return (
-    <div className="min-h-screen bg-white/80 backdrop-blur-md">
-      <Header
-        onAboutClick={() => setShowAbout(true)}
-        isScrolled={headerScrolled}
-        title="Text to Voice"
-        showBackButton={true}
-        headerIcon="/text-to-voice-icon.jpg"
-        subtitle="Instant voice generation from text"
-        hideSettings={true}
-      />
-
-      <main className="container mx-auto px-4 py-8">
-        <TextToVoiceForm
-          onSearch={handleSearch}
-          loading={loading}
-          searchAttempted={searchAttempted}
-          onSearchAttempt={handleSearchAttempt}
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute top-20 right-20 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl animate-float-gentle" />
+        <div
+          className="absolute bottom-20 left-20 w-80 h-80 bg-pink-200/15 rounded-full blur-3xl animate-float-gentle"
+          style={{ animationDelay: "2s" }}
         />
-        <AudioResults audioData={audioData} loading={loading} searchAttempted={searchAttempted} />
-      </main>
+      </div>
+      <div className="relative z-10">
+        <Header
+          onAboutClick={() => setShowAbout(true)}
+          onSettingsClick={() => {}}
+          isScrolled={headerScrolled}
+          title="Text to Voice"
+          showBackButton={true}
+          headerIcon="/text-to-voice-icon.jpg"
+          subtitle="Instant voice generation from text"
+          hideSettings={true}
+        />
 
-      {showAbout && <AboutModal onClose={() => setShowAbout(false)} isTextToVoice={true} />}
+        <main className="container mx-auto px-4 py-8">
+          <TextToVoiceForm
+            onSearch={handleSearch}
+            loading={loading}
+            searchAttempted={searchAttempted}
+            onSearchAttempt={handleSearchAttempt}
+          />
+          <AudioResults audioData={audioData} loading={loading} searchAttempted={searchAttempted} />
+        </main>
+
+        {showAbout && <AboutModal onClose={() => setShowAbout(false)} isTextToVoice={true} />}
+      </div>
     </div>
   )
 }

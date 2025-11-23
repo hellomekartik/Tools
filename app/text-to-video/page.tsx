@@ -73,24 +73,38 @@ export default function TextToVideo() {
   }
 
   return (
-    <div className="min-h-screen bg-white/80 backdrop-blur-md">
-      <Header
-        onSettingsClick={() => setShowSettings(true)}
-        onAboutClick={() => setShowAbout(true)}
-        isScrolled={headerScrolled}
-        title="Text to Video"
-        showBackButton={true}
-        headerIcon="/text-to-video-icon.png"
-        subtitle="Generate videos from text prompts"
-        hideSettings={true}
-      />
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      <div className="absolute inset-0">
+        <div className="absolute top-20 right-20 w-96 h-96 bg-violet-200/20 rounded-full blur-3xl animate-float-gentle" />
+        <div
+          className="absolute bottom-20 left-20 w-80 h-80 bg-purple-200/15 rounded-full blur-3xl animate-float-gentle"
+          style={{ animationDelay: "2s" }}
+        />
+      </div>
+      <div className="relative z-10">
+        <Header
+          onSettingsClick={() => setShowSettings(true)}
+          onAboutClick={() => setShowAbout(true)}
+          isScrolled={headerScrolled}
+          title="Text to Video"
+          showBackButton={true}
+          headerIcon="/text-to-video-icon.png"
+          subtitle="Generate videos from text prompts"
+          hideSettings={true}
+        />
 
-      <main className="container mx-auto px-4 py-8">
-        <TextToVideoForm onSearch={handleSearch} loading={loading} prompt={prompt} searchAttempted={searchAttempted} />
-        <VideoResults results={results} loading={loading} searchAttempted={searchAttempted} />
-      </main>
+        <main className="container mx-auto px-4 py-8">
+          <TextToVideoForm
+            onSearch={handleSearch}
+            loading={loading}
+            prompt={prompt}
+            searchAttempted={searchAttempted}
+          />
+          <VideoResults results={results} loading={loading} searchAttempted={searchAttempted} />
+        </main>
 
-      {showAbout && <AboutModal onClose={() => setShowAbout(false)} isTextToVideo={true} />}
+        {showAbout && <AboutModal onClose={() => setShowAbout(false)} isTextToVideo={true} />}
+      </div>
     </div>
   )
 }
