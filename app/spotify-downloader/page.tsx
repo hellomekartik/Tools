@@ -37,6 +37,7 @@ export default function SpotifyDownloader() {
   const [searchResults, setSearchResults] = useState<TrackDetail[]>([])
   const [searchAttempted, setSearchAttempted] = useState(false)
   const [selectedTrackData, setSelectedTrackData] = useState<TrackDetail | null>(null)
+  const [cameFromSearch, setCameFromSearch] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,7 +49,15 @@ export default function SpotifyDownloader() {
 
   const handleSearch = async (query: string) => {
     if (!query.trim()) {
-      setError("Please enter a song name")
+      setError("Please enter a song name or URL")
+      return
+    }
+
+    const isUrl = query.includes("open.spotify.com") || query.includes("spotify:")
+
+    if (isUrl) {
+      setCameFromSearch(false)
+      handleUrlSelect(query)
       return
     }
 
@@ -58,6 +67,7 @@ export default function SpotifyDownloader() {
     setSearchAttempted(true)
     setTrackInfo(null)
     setSearchResults([])
+    setCameFromSearch(true)
 
     try {
       console.log("[v0] Searching for:", query)
@@ -70,7 +80,6 @@ export default function SpotifyDownloader() {
       const data = await response.json()
       console.log("[v0] Search results received:", data)
 
-      // Parse results from the external API response
       const results = data.tracks || data.results || data.data || []
       const formattedResults = (Array.isArray(results) ? results : []).map((track: any) => ({
         url: track.url || track.link || "",
@@ -117,13 +126,13 @@ export default function SpotifyDownloader() {
 
       const trackData = data.data?.data || data.data || data
       setTrackInfo({
-        title: selectedTrack?.title || trackData.title,
-        artist: selectedTrack?.artists || trackData.author,
-        artists: selectedTrack?.artists || trackData.author,
+        title: selectedTrack?.title || trackData.title || "Unknown Title",
+        artist: selectedTrack?.artists || trackData.author || "Unknown Artist",
+        artists: selectedTrack?.artists || trackData.author || "Unknown Artist",
         album: trackData.album,
-        image: trackData.thumbnail,
+        image: trackData.thumbnail || trackData.image,
         url: trackData.url,
-        audio: trackData.medias?.[0]?.url,
+        audio: trackData.medias?.[0]?.url || trackData.url,
       })
       setError(null)
     } catch (err) {
@@ -188,7 +197,7 @@ export default function SpotifyDownloader() {
 
           {trackInfo ? (
             <div>
-              {trackInfo && (
+              {cameFromSearch && trackInfo && (
                 <button
                   onClick={handleBackToResults}
                   className="mb-4 px-4 py-2 text-sm font-medium text-purple-600 hover:text-purple-700 transition-colors"

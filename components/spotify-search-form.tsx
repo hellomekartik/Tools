@@ -26,19 +26,19 @@ export default function SpotifySearchForm({ onSearch, loading }: SpotifySearchFo
         <h2 className="text-4xl font-bold text-foreground mb-2 bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
           Download Spotify Tracks
         </h2>
-        <p className="text-muted-foreground">Search for your favorite songs</p>
+        <p className="text-muted-foreground">Search for your favorite songs or paste a Spotify link</p>
       </div>
 
       <form
         onSubmit={handleSubmit}
         className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl shadow-emerald-200/30 p-6 sm:p-8 border border-border flex flex-col gap-4"
       >
-        <label className="block text-sm font-semibold text-foreground">Song Name</label>
+        <label className="block text-sm font-semibold text-foreground">Song Name or Spotify Link</label>
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search for a song, artist, or album..."
+          placeholder="Search for a song or paste a Spotify link..."
           className="w-full px-4 py-3 bg-emerald-50/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-foreground placeholder-muted-foreground"
           disabled={loading}
         />

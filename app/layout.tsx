@@ -8,7 +8,7 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Tools Hub - Powerful Utilities Collection",
+  title: "Skull Tools - Powerful Utilities Collection",
   description: "Access powerful tools for text-to-image, text-to-video, QR generation, and more",
   generator: "v0.app",
 }

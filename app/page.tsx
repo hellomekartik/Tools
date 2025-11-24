@@ -78,9 +78,9 @@ export default function Home() {
           </div>
 
           <h1 className="text-6xl md:text-8xl font-bold text-foreground mb-6 tracking-tight">
-            Tools{" "}
+            Skull{" "}
             <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-violet-600 bg-clip-text text-transparent">
-              Hub
+              Tools
             </span>
           </h1>
 
