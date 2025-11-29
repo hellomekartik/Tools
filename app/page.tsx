@@ -77,44 +77,37 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Animated background orbs with glow */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-purple-300/40 rounded-full blur-3xl animate-float-gentle" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-80 h-80 bg-purple-200/40 rounded-full blur-3xl animate-float-gentle" />
         <div
-          className="absolute bottom-20 right-10 w-80 h-80 bg-pink-300/30 rounded-full blur-3xl animate-float-slow"
-          style={{ animationDelay: "2s" }}
-        />
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-violet-200/25 rounded-full blur-3xl animate-float-gentle"
-          style={{ animationDelay: "4s" }}
-        />
-        <div
-          className="absolute top-40 right-1/4 w-64 h-64 bg-indigo-200/30 rounded-full blur-3xl animate-float-slow"
-          style={{ animationDelay: "1s" }}
-        />
-        <div
-          className="absolute bottom-40 left-1/4 w-72 h-72 bg-pink-200/25 rounded-full blur-3xl animate-float-gentle"
-          style={{ animationDelay: "3s" }}
+          className="absolute bottom-20 right-10 w-72 h-72 bg-pink-200/30 rounded-full blur-3xl animate-float-gentle"
+          style={{ animationDelay: "5s" }}
         />
       </div>
 
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-16">
         <div className="text-center mb-16 space-y-6">
-          <div className="relative inline-flex animate-fade-in-up">
-            {/* Purple glow shadow behind the pill */}
-            <div className="absolute inset-0 bg-purple-400/30 rounded-full blur-xl scale-110" />
-            <div className="relative inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white border border-purple-100 shadow-lg shadow-purple-300/40">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
-              </span>
-              <span className="text-lg font-semibold text-purple-600 tracking-wide">{currentTime || "Loading..."}</span>
+          <div className="animate-fade-in-up">
+            <div className="relative inline-flex">
+              <div className="absolute inset-0 bg-purple-300/40 rounded-full blur-xl" />
+              <div className="relative inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white border border-purple-100 shadow-lg shadow-purple-200/50">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-60"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+                </span>
+                <span className="text-lg font-semibold text-purple-600 tracking-wide">
+                  {currentTime || "Loading..."}
+                </span>
+              </div>
             </div>
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-bold text-foreground mb-6 tracking-tight animate-fade-in-up stagger-1">
+          <h1
+            className="text-6xl md:text-8xl font-bold text-foreground tracking-tight animate-fade-in-up"
+            style={{ animationDelay: "0.1s" }}
+          >
             Skull{" "}
-            <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-violet-600 bg-clip-text text-transparent animate-gradient-x animate-text-glow">
+            <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-violet-600 bg-clip-text text-transparent">
               Tools
             </span>
           </h1>
@@ -135,40 +128,31 @@ export default function Home() {
                   key={tool.href}
                   {...linkProps}
                   className="group animate-fade-in-up opacity-0"
-                  style={{ animationDelay: `${index * 100 + 300}ms`, animationFillMode: "forwards" }}
+                  style={{ animationDelay: `${index * 80 + 200}ms`, animationFillMode: "forwards" }}
                 >
-                  <div className="relative bg-white/90 backdrop-blur-sm border border-border rounded-2xl p-8 h-full flex flex-col items-center justify-center text-center transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl hover:shadow-purple-300/40 hover:border-purple-300/60 card-glow animate-border-glow">
+                  <div className="relative bg-white/90 backdrop-blur-sm border border-border rounded-2xl p-8 h-full flex flex-col items-center justify-center text-center card-glow hover:scale-[1.02] transition-transform duration-300">
                     <div className="mb-6 relative">
                       <div
-                        className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} rounded-2xl blur-xl opacity-40 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110`}
+                        className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-300`}
                       />
                       <div
-                        className={`relative w-20 h-20 rounded-2xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center group-hover:animate-bounce-subtle transition-all duration-300`}
+                        className={`relative w-20 h-20 rounded-2xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center transition-transform duration-300 group-hover:scale-105`}
                       >
-                        <Icon className="w-10 h-10 text-white group-hover:animate-icon-float" strokeWidth={1.5} />
+                        <Icon className="w-10 h-10 text-white" strokeWidth={1.5} />
                       </div>
                     </div>
 
-                    <h2 className="text-xl font-bold text-foreground mb-2 group-hover:text-purple-600 transition-all duration-300 group-hover:animate-text-glow">
+                    <h2 className="text-xl font-bold text-foreground mb-2 group-hover:text-purple-600 transition-colors duration-300">
                       {tool.title}
                     </h2>
 
-                    <p className="text-sm text-muted-foreground mb-4 transition-all duration-300 group-hover:text-foreground/80">
-                      {tool.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground mb-4">{tool.description}</p>
 
                     <div className="mt-2">
-                      <span className="text-purple-600 text-sm font-semibold group-hover:gap-3 inline-flex items-center gap-1.5 transition-all duration-300">
+                      <span className="text-purple-600 text-sm font-semibold inline-flex items-center gap-1.5 transition-all duration-300 group-hover:gap-3">
                         Get Started
-                        <span className="group-hover:translate-x-2 transition-transform duration-300 inline-block">
-                          →
-                        </span>
+                        <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                       </span>
-                    </div>
-
-                    {/* Shimmer effect on hover */}
-                    <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer" />
                     </div>
                   </div>
                 </LinkComponent>
@@ -179,11 +163,9 @@ export default function Home() {
 
         <div
           className="mt-20 text-center animate-fade-in-up opacity-0"
-          style={{ animationDelay: "1000ms", animationFillMode: "forwards" }}
+          style={{ animationDelay: "800ms", animationFillMode: "forwards" }}
         >
-          <p className="text-muted-foreground text-sm font-light animate-bounce-subtle">
-            Crafted with care for seamless productivity
-          </p>
+          <p className="text-muted-foreground text-sm font-light">Crafted with care for seamless productivity</p>
         </div>
       </div>
     </div>
