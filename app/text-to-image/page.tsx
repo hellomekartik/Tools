@@ -36,17 +36,13 @@ export default function TextToImage() {
 
     try {
       const apiUrl = `/api/text-to-image?prompt=${encodeURIComponent(prompt)}`
-      console.log("[v0] Fetching from:", apiUrl)
-
       const response = await fetch(apiUrl)
-      console.log("[v0] Response status:", response.status)
 
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`)
       }
 
       const data = await response.json()
-      console.log("[v0] Response data received")
 
       if (data.url) {
         setImageData({
@@ -57,7 +53,7 @@ export default function TextToImage() {
         setImageData(null)
       }
     } catch (error) {
-      console.error("[v0] Error fetching image:", error)
+      console.error("Error fetching image:", error)
       setImageData(null)
     } finally {
       setLoading(false)
@@ -66,13 +62,22 @@ export default function TextToImage() {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      <div className="absolute inset-0">
-        <div className="absolute top-20 right-20 w-96 h-96 bg-pink-200/20 rounded-full blur-3xl animate-float-gentle" />
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 right-20 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-float-gentle" />
         <div
-          className="absolute bottom-20 left-20 w-80 h-80 bg-purple-200/15 rounded-full blur-3xl animate-float-gentle"
+          className="absolute bottom-20 left-20 w-80 h-80 bg-purple-300/25 rounded-full blur-3xl animate-float-slow"
           style={{ animationDelay: "2s" }}
         />
+        <div
+          className="absolute top-1/2 left-1/3 w-72 h-72 bg-violet-200/30 rounded-full blur-3xl animate-float-gentle"
+          style={{ animationDelay: "4s" }}
+        />
+        <div
+          className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-rose-200/25 rounded-full blur-3xl animate-float-slow"
+          style={{ animationDelay: "1s" }}
+        />
       </div>
+
       <div className="relative z-10">
         <Header
           onSettingsClick={() => {}}
@@ -84,7 +89,7 @@ export default function TextToImage() {
           hideSettings={true}
         />
 
-        <main className="container mx-auto px-4 py-8">
+        <main className="container mx-auto px-4 py-8 animate-fade-in-up">
           <TextToImageForm
             onSearch={handleSearch}
             loading={loading}

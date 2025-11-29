@@ -1,9 +1,28 @@
 "use client"
 
 import Link from "next/link"
-import { Video, Volume2, ImageIcon, Download, QrCode, Music, Link2, Sparkles } from "lucide-react"
+import { Video, Volume2, ImageIcon, Download, QrCode, Music, Link2 } from "lucide-react"
+import { useState, useEffect } from "react"
 
 export default function Home() {
+  const [currentTime, setCurrentTime] = useState<string>("")
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date()
+      const hours = now.getHours()
+      const minutes = now.getMinutes().toString().padStart(2, "0")
+      const seconds = now.getSeconds().toString().padStart(2, "0")
+      const ampm = hours >= 12 ? "PM" : "AM"
+      const displayHours = (hours % 12 || 12).toString().padStart(2, "0")
+      setCurrentTime(`${displayHours}:${minutes}:${seconds} ${ampm}`)
+    }
+
+    updateTime()
+    const interval = setInterval(updateTime, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
   const tools = [
     {
       href: "/text-to-video",
@@ -48,7 +67,7 @@ export default function Home() {
       gradient: "from-green-500 to-emerald-600",
     },
     {
-      href: "/url-shortener",
+      href: "https://skullurl.vercel.app/",
       title: "URL Shortener",
       icon: Link2,
       description: "Shorten your links",
@@ -58,81 +77,113 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Animated background orbs with glow */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl animate-float-gentle" />
+        <div className="absolute top-20 left-10 w-96 h-96 bg-purple-300/40 rounded-full blur-3xl animate-float-gentle" />
         <div
-          className="absolute bottom-20 right-10 w-80 h-80 bg-pink-200/25 rounded-full blur-3xl animate-float-gentle"
-          style={{ animationDelay: "3s" }}
+          className="absolute bottom-20 right-10 w-80 h-80 bg-pink-300/30 rounded-full blur-3xl animate-float-slow"
+          style={{ animationDelay: "2s" }}
         />
         <div
-          className="absolute top-1/2 left-1/2 w-72 h-72 bg-violet-200/20 rounded-full blur-3xl animate-float-gentle"
-          style={{ animationDelay: "1.5s" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-violet-200/25 rounded-full blur-3xl animate-float-gentle"
+          style={{ animationDelay: "4s" }}
+        />
+        <div
+          className="absolute top-40 right-1/4 w-64 h-64 bg-indigo-200/30 rounded-full blur-3xl animate-float-slow"
+          style={{ animationDelay: "1s" }}
+        />
+        <div
+          className="absolute bottom-40 left-1/4 w-72 h-72 bg-pink-200/25 rounded-full blur-3xl animate-float-gentle"
+          style={{ animationDelay: "3s" }}
         />
       </div>
 
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-16">
-        <div className="text-center mb-16 space-y-6 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 border border-purple-200">
-            <Sparkles className="w-4 h-4 text-purple-600" />
-            <span className="text-sm font-medium text-purple-700">All-in-One Toolkit</span>
+        <div className="text-center mb-16 space-y-6">
+          <div className="relative inline-flex animate-fade-in-up">
+            {/* Purple glow shadow behind the pill */}
+            <div className="absolute inset-0 bg-purple-400/30 rounded-full blur-xl scale-110" />
+            <div className="relative inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white border border-purple-100 shadow-lg shadow-purple-300/40">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+              </span>
+              <span className="text-lg font-semibold text-purple-600 tracking-wide">{currentTime || "Loading..."}</span>
+            </div>
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-bold text-foreground mb-6 tracking-tight">
+          <h1 className="text-6xl md:text-8xl font-bold text-foreground mb-6 tracking-tight animate-fade-in-up stagger-1">
             Skull{" "}
-            <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-violet-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-violet-600 bg-clip-text text-transparent animate-gradient-x animate-text-glow">
               Tools
             </span>
           </h1>
-
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto font-light leading-relaxed">
-            Powerful utilities designed for modern workflows
-          </p>
         </div>
 
         <div className="w-full max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {tools.map((tool, index) => {
               const Icon = tool.icon
+              const isExternal = tool.href.startsWith("http")
+              const LinkComponent = isExternal ? "a" : Link
+              const linkProps = isExternal
+                ? { href: tool.href, target: "_blank", rel: "noopener noreferrer" }
+                : { href: tool.href }
+
               return (
-                <Link
+                <LinkComponent
                   key={tool.href}
-                  href={tool.href}
-                  className="group animate-fade-in-up"
-                  style={{ animationDelay: `${index * 100 + 200}ms` }}
+                  {...linkProps}
+                  className="group animate-fade-in-up opacity-0"
+                  style={{ animationDelay: `${index * 100 + 300}ms`, animationFillMode: "forwards" }}
                 >
-                  <div className="relative bg-white border border-border rounded-2xl p-8 h-full flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-200/50 hover:border-purple-300">
+                  <div className="relative bg-white/90 backdrop-blur-sm border border-border rounded-2xl p-8 h-full flex flex-col items-center justify-center text-center transition-all duration-500 hover:scale-[1.03] hover:shadow-2xl hover:shadow-purple-300/40 hover:border-purple-300/60 card-glow animate-border-glow">
                     <div className="mb-6 relative">
                       <div
-                        className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity`}
+                        className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} rounded-2xl blur-xl opacity-40 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110`}
                       />
                       <div
-                        className={`relative w-20 h-20 rounded-2xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center group-hover:animate-glow-subtle`}
+                        className={`relative w-20 h-20 rounded-2xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center group-hover:animate-bounce-subtle transition-all duration-300`}
                       >
-                        <Icon className="w-10 h-10 text-white" strokeWidth={1.5} />
+                        <Icon className="w-10 h-10 text-white group-hover:animate-icon-float" strokeWidth={1.5} />
                       </div>
                     </div>
 
-                    <h2 className="text-xl font-bold text-foreground mb-2 group-hover:text-purple-600 transition-colors">
+                    <h2 className="text-xl font-bold text-foreground mb-2 group-hover:text-purple-600 transition-all duration-300 group-hover:animate-text-glow">
                       {tool.title}
                     </h2>
 
-                    <p className="text-sm text-muted-foreground mb-4">{tool.description}</p>
+                    <p className="text-sm text-muted-foreground mb-4 transition-all duration-300 group-hover:text-foreground/80">
+                      {tool.description}
+                    </p>
 
                     <div className="mt-2">
-                      <span className="text-purple-600 text-sm font-semibold group-hover:gap-2 inline-flex items-center gap-1 transition-all">
+                      <span className="text-purple-600 text-sm font-semibold group-hover:gap-3 inline-flex items-center gap-1.5 transition-all duration-300">
                         Get Started
-                        <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
+                        <span className="group-hover:translate-x-2 transition-transform duration-300 inline-block">
+                          →
+                        </span>
                       </span>
                     </div>
+
+                    {/* Shimmer effect on hover */}
+                    <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-shimmer" />
+                    </div>
                   </div>
-                </Link>
+                </LinkComponent>
               )
             })}
           </div>
         </div>
 
-        <div className="mt-20 text-center animate-fade-in-up" style={{ animationDelay: "800ms" }}>
-          <p className="text-muted-foreground text-sm font-light">Crafted with care for seamless productivity</p>
+        <div
+          className="mt-20 text-center animate-fade-in-up opacity-0"
+          style={{ animationDelay: "1000ms", animationFillMode: "forwards" }}
+        >
+          <p className="text-muted-foreground text-sm font-light animate-bounce-subtle">
+            Crafted with care for seamless productivity
+          </p>
         </div>
       </div>
     </div>
