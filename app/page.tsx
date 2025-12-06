@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Video, Volume2, ImageIcon, Download, QrCode, Music, Link2 } from "lucide-react"
+import { Volume2, ImageIcon, Download, QrCode, Music, Link2, Languages } from "lucide-react"
 import { useState, useEffect } from "react"
 
 export default function Home() {
@@ -24,13 +24,6 @@ export default function Home() {
   }, [])
 
   const tools = [
-    {
-      href: "/text-to-video",
-      title: "Text to Video",
-      icon: Video,
-      description: "Create videos from text",
-      gradient: "from-violet-500 to-purple-600",
-    },
     {
       href: "/text-to-voice",
       title: "Text to Voice",
@@ -61,9 +54,9 @@ export default function Home() {
     },
     {
       href: "/spotify-downloader",
-      title: "Spotify Downloader",
+      title: "Spotify Track",
       icon: Music,
-      description: "Download Spotify tracks",
+      description: "Play & download Spotify tracks",
       gradient: "from-green-500 to-emerald-600",
     },
     {
@@ -72,6 +65,13 @@ export default function Home() {
       icon: Link2,
       description: "Shorten your links",
       gradient: "from-blue-500 to-cyan-600",
+    },
+    {
+      href: "/translator",
+      title: "Translator",
+      icon: Languages,
+      description: "Translate text to any language",
+      gradient: "from-orange-500 to-amber-600",
     },
   ]
 
@@ -159,13 +159,6 @@ export default function Home() {
               )
             })}
           </div>
-        </div>
-
-        <div
-          className="mt-20 text-center animate-fade-in-up opacity-0"
-          style={{ animationDelay: "800ms", animationFillMode: "forwards" }}
-        >
-          <p className="text-muted-foreground text-sm font-light">Crafted with care for seamless productivity</p>
         </div>
       </div>
     </div>

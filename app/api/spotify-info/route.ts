@@ -7,8 +7,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    console.log("[v0] Fetching Spotify info for:", url)
-    const apiUrl = `https://spotify.anshapi.workers.dev/?url=${encodeURIComponent(url)}`
+    const apiUrl = `https://all-downloader.itxkaal.workers.dev/?url=${encodeURIComponent(url)}`
 
     const response = await fetch(apiUrl)
 
@@ -17,11 +16,10 @@ export async function GET(request: Request) {
     }
 
     const data = await response.json()
-    console.log("[v0] Spotify info received:", data)
 
     return Response.json(data)
   } catch (error) {
-    console.error("[v0] Spotify info error:", error)
+    console.error("Spotify info error:", error)
     return Response.json({ error: "Failed to fetch track information" }, { status: 500 })
   }
 }

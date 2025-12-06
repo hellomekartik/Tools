@@ -1,7 +1,8 @@
 "use client"
 
-import { DownloadIcon, AlertCircle, Music } from "lucide-react"
+import { DownloadIcon, AlertCircle, Music, Play } from "lucide-react"
 import { useState } from "react"
+import MediaViewer from "./media-viewer"
 
 interface TrackInfo {
   title?: string
@@ -23,6 +24,7 @@ interface SpotifyTrackInfoProps {
 
 export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload }: SpotifyTrackInfoProps) {
   const [downloading, setDownloading] = useState(false)
+  const [showPlayer, setShowPlayer] = useState(false)
 
   if (!trackInfo && !loading && !error) {
     return null
@@ -67,78 +69,126 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
 
     setDownloading(true)
     try {
-      const response = await fetch(trackInfo.audio)
+      const trackName = (trackInfo.title || "track").replace(/[^a-zA-Z0-9\s\-_.]/g, "").trim()
+      const response = await fetch(
+        `/api/download-media?url=${encodeURIComponent(trackInfo.audio)}&filename=${encodeURIComponent(trackName)}`,
+      )
+
+      if (!response.ok) {
+        throw new Error("Download failed")
+      }
+
       const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = `${trackInfo.title || "track"}.mp3`
-      document.body.appendChild(a)
-      a.click()
-      window.URL.revokeObjectURL(url)
-      document.body.removeChild(a)
+      const blobUrl = URL.createObjectURL(blob)
+
+      const link = document.createElement("a")
+      link.href = blobUrl
+      link.download = `${trackName}.mp3`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+
+      // Clean up blob URL after download
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000)
     } catch (err) {
       console.error("[v0] Download error:", err)
-      alert("Failed to download track")
+      window.open(trackInfo.audio, "_blank")
     } finally {
       setDownloading(false)
     }
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 mb-12">
-      <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-slate-200">
-        <h3 className="text-2xl font-bold text-slate-900 mb-6">Track Information</h3>
+    <>
+      <div className="max-w-2xl mx-auto px-4 mb-12">
+        <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-slate-200">
+          <h3 className="text-2xl font-bold text-slate-900 mb-6">Track Information</h3>
 
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Thumbnail */}
-          <div className="md:w-48 flex-shrink-0">
-            <div className="w-full aspect-square bg-slate-200 rounded-lg overflow-hidden flex items-center justify-center">
-              {trackInfo.image ? (
-                <img
-                  src={trackInfo.image || "/placeholder.svg"}
-                  alt={trackInfo.title}
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = "/abstract-soundscape.png"
-                  }}
-                />
-              ) : (
-                <Music className="w-16 h-16 text-slate-400" />
-              )}
-            </div>
-          </div>
-
-          {/* Track Details */}
-          <div className="flex-1 flex flex-col justify-center">
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900">{trackInfo.title || "Unknown Title"}</h2>
-                {trackInfo.artists && <p className="text-sm text-slate-600 mt-1">{trackInfo.artists}</p>}
-              </div>
-
-              {/* Download Button */}
-              <button
-                onClick={handleDownload}
-                disabled={downloading || !trackInfo.audio}
-                className="w-full bg-green-500 hover:bg-green-600 disabled:bg-green-400 text-white font-semibold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
-              >
-                {downloading ? (
+          <div className="flex flex-col md:flex-row gap-6">
+            {/* Thumbnail */}
+            <div className="md:w-48 flex-shrink-0">
+              <div className="w-full aspect-square bg-slate-200 rounded-lg overflow-hidden flex items-center justify-center relative group">
+                {trackInfo.image ? (
                   <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Downloading...
+                    <img
+                      src={trackInfo.image || "/placeholder.svg"}
+                      alt={trackInfo.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = "/abstract-soundscape.png"
+                      }}
+                    />
+                    {trackInfo.audio && (
+                      <button
+                        onClick={() => setShowPlayer(true)}
+                        className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                      >
+                        <div className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center shadow-lg">
+                          <Play className="w-6 h-6 text-white ml-1" />
+                        </div>
+                      </button>
+                    )}
                   </>
                 ) : (
-                  <>
-                    <DownloadIcon className="w-5 h-5" />
-                    Download Track
-                  </>
+                  <Music className="w-16 h-16 text-slate-400" />
                 )}
-              </button>
+              </div>
+            </div>
+
+            {/* Track Details */}
+            <div className="flex-1 flex flex-col justify-center">
+              <div className="space-y-4">
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-900">{trackInfo.title || "Unknown Title"}</h2>
+                  {trackInfo.artists && <p className="text-sm text-slate-600 mt-1">{trackInfo.artists}</p>}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  {trackInfo.audio && (
+                    <button
+                      onClick={() => setShowPlayer(true)}
+                      className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/25"
+                    >
+                      <Play className="w-5 h-5" />
+                      Play Track
+                    </button>
+                  )}
+
+                  <button
+                    onClick={handleDownload}
+                    disabled={downloading || !trackInfo.audio}
+                    className="flex-1 bg-slate-800 hover:bg-slate-900 disabled:bg-slate-400 text-white font-semibold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
+                  >
+                    {downloading ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Downloading...
+                      </>
+                    ) : (
+                      <>
+                        <DownloadIcon className="w-5 h-5" />
+                        Download
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {showPlayer && trackInfo.audio && (
+        <MediaViewer
+          type="audio"
+          src={trackInfo.audio}
+          title={trackInfo.title}
+          artist={trackInfo.artists}
+          thumbnail={trackInfo.image}
+          onClose={() => setShowPlayer(false)}
+          onDownload={handleDownload}
+        />
+      )}
+    </>
   )
 }

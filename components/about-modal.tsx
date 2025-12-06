@@ -1,6 +1,6 @@
 "use client"
 
-import { X, Code2, Video, Volume2, ImageIcon, Download, QrCode, Music, Sparkles } from "lucide-react"
+import { X, Code2, Video, Volume2, ImageIcon, Download, QrCode, Music, Sparkles, Languages } from "lucide-react"
 import Image from "next/image"
 import { createPortal } from "react-dom"
 import { useEffect, useState } from "react"
@@ -14,6 +14,7 @@ interface AboutModalProps {
   isTerabox?: boolean
   isLinkToQr?: boolean
   isSpotifyDownloader?: boolean
+  isTranslator?: boolean
 }
 
 export default function AboutModal({
@@ -25,6 +26,7 @@ export default function AboutModal({
   isTerabox = false,
   isLinkToQr = false,
   isSpotifyDownloader = false,
+  isTranslator = false,
 }: AboutModalProps) {
   const [mounted, setMounted] = useState(false)
 
@@ -33,6 +35,13 @@ export default function AboutModal({
   }, [])
 
   const renderToolIcon = () => {
+    if (isTranslator) {
+      return (
+        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-400 to-amber-500 flex items-center justify-center shadow-xl shadow-orange-400/40 animate-glow-pulse">
+          <Languages className="w-10 h-10 text-white" strokeWidth={1.5} />
+        </div>
+      )
+    }
     if (isSpotifyDownloader) {
       return (
         <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-xl shadow-emerald-400/40 animate-glow-pulse">
@@ -88,8 +97,8 @@ export default function AboutModal({
 
   const modalContent = (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in">
-      <div className="bg-white rounded-3xl shadow-2xl shadow-purple-200/40 max-w-md w-full max-h-[90vh] overflow-y-auto animate-fade-in-scale">
-        <div className="flex items-center justify-between p-6 border-b border-purple-100 sticky top-0 bg-white/95 backdrop-blur-xl rounded-t-3xl">
+      <div className="bg-white rounded-3xl shadow-2xl shadow-purple-200/40 max-w-md w-full max-h-[90vh] overflow-hidden animate-fade-in-scale">
+        <div className="flex items-center justify-between p-6 border-b border-purple-100 sticky top-0 bg-white z-10">
           <h2 className="text-2xl font-bold text-foreground">About</h2>
           <button
             onClick={onClose}
@@ -99,26 +108,28 @@ export default function AboutModal({
           </button>
         </div>
 
-        <div className="p-6 space-y-8">
+        <div className="p-6 space-y-8 max-h-[calc(90vh-88px)] overflow-y-auto">
           {/* Tool Icon & Name */}
           <div className="flex flex-col items-center gap-4 animate-fade-in-up">
             {renderToolIcon()}
             <h3 className="font-bold text-xl text-foreground text-center">
-              {isSpotifyDownloader
-                ? "Spotify Downloader"
-                : isLinkToQr
-                  ? "Link to QR"
-                  : isTextToVoice
-                    ? "Text to Voice"
-                    : isTextToVideo
-                      ? "Text to Video"
-                      : isTextToImage
-                        ? "Text to Image"
-                        : isTerabox
-                          ? "Terabox Downloader"
-                          : isAadhar
-                            ? "Aadhar Lookup"
-                            : "Phone Lookup"}
+              {isTranslator
+                ? "Translator"
+                : isSpotifyDownloader
+                  ? "Spotify Downloader"
+                  : isLinkToQr
+                    ? "Link to QR"
+                    : isTextToVoice
+                      ? "Text to Voice"
+                      : isTextToVideo
+                        ? "Text to Video"
+                        : isTextToImage
+                          ? "Text to Image"
+                          : isTerabox
+                            ? "Terabox Downloader"
+                            : isAadhar
+                              ? "Aadhar Lookup"
+                              : "Phone Lookup"}
             </h3>
           </div>
 
@@ -146,19 +157,21 @@ export default function AboutModal({
               <div>
                 <h4 className="font-semibold text-foreground mb-2">About This Tool</h4>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  {isSpotifyDownloader
-                    ? "Download songs from Spotify links easily. Extract song info including artist, album, and direct download links."
-                    : isLinkToQr
-                      ? "Convert any URL into a scannable QR code instantly with a beautiful, modern interface."
-                      : isTextToVoice
-                        ? "Convert text into natural-sounding speech with multiple voice options and languages."
-                        : isTextToVideo
-                          ? "Generate videos from text prompts using advanced AI technology."
-                          : isTextToImage
-                            ? "Generate stunning images from text prompts using cutting-edge AI."
-                            : isTerabox
-                              ? "Download files from Terabox links with thumbnails and direct download links."
-                              : "Access information instantly through an intuitive, modern interface."}
+                  {isTranslator
+                    ? "Translate text between 50+ languages instantly with high accuracy using advanced translation API."
+                    : isSpotifyDownloader
+                      ? "Download songs from Spotify links easily. Extract song info including artist, album, and direct download links."
+                      : isLinkToQr
+                        ? "Convert any URL into a scannable QR code instantly with a beautiful, modern interface."
+                        : isTextToVoice
+                          ? "Convert text into natural-sounding speech with multiple voice options and languages."
+                          : isTextToVideo
+                            ? "Generate videos from text prompts using advanced AI technology."
+                            : isTextToImage
+                              ? "Generate stunning images from text prompts using cutting-edge AI."
+                              : isTerabox
+                                ? "Download files from Terabox links with thumbnails and direct download links."
+                                : "Access information instantly through an intuitive, modern interface."}
                 </p>
               </div>
             </div>

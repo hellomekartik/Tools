@@ -122,21 +122,20 @@ export default function SpotifyDownloader() {
       }
 
       const data = await response.json()
-      console.log("[v0] Track info received:", data)
 
-      const trackData = data.data?.data || data.data || data
+      const trackData = data.data || data
       setTrackInfo({
-        title: selectedTrack?.title || trackData.title || "Unknown Title",
-        artist: selectedTrack?.artists || trackData.author || "Unknown Artist",
-        artists: selectedTrack?.artists || trackData.author || "Unknown Artist",
+        title: selectedTrack?.title || trackData.title || trackData.name || "Unknown Title",
+        artist: selectedTrack?.artists || trackData.artist || trackData.author || "Unknown Artist",
+        artists: selectedTrack?.artists || trackData.artist || trackData.author || "Unknown Artist",
         album: trackData.album,
-        image: trackData.thumbnail || trackData.image,
-        url: trackData.url,
-        audio: trackData.medias?.[0]?.url || trackData.url,
+        image: trackData.thumbnail || trackData.image || trackData.cover,
+        url: trackData.url || url,
+        audio: trackData.download || trackData.audio || trackData.medias?.[0]?.url || trackData.url,
       })
       setError(null)
     } catch (err) {
-      console.error("[v0] Track fetch error:", err)
+      console.error("Track fetch error:", err)
       setError("Failed to fetch track information. Please try again.")
       setTrackInfo(null)
     } finally {

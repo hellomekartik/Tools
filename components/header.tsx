@@ -1,6 +1,18 @@
 "use client"
 
-import { Menu, Settings, Info, ArrowLeft, Video, Volume2, ImageIcon, Download, QrCode, Music } from "lucide-react"
+import {
+  Menu,
+  Settings,
+  Info,
+  ArrowLeft,
+  Video,
+  Volume2,
+  ImageIcon,
+  Download,
+  QrCode,
+  Music,
+  Languages,
+} from "lucide-react"
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
@@ -70,6 +82,13 @@ export default function Header({
       return (
         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-400/40 animate-glow-pulse">
           <QrCode className="w-6 h-6 text-white" strokeWidth={1.5} />
+        </div>
+      )
+    }
+    if (title === "Translator") {
+      return (
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-lg shadow-orange-400/40 animate-glow-pulse">
+          <Languages className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
