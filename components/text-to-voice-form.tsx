@@ -298,7 +298,14 @@ export default function TextToVoiceForm({ onSearch, loading, searchAttempted, on
         />
 
         {type === "google" && (
-          <CustomSelect value={lang} onChange={setLang} options={googleLanguages} disabled={loading} label="Language" />
+          <CustomSelect
+            value={lang}
+            onChange={setLang}
+            options={googleLanguages}
+            disabled={loading}
+            label="Language"
+            searchable={true}
+          />
         )}
 
         {type === "streamelements" && (

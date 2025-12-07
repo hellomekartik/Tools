@@ -271,7 +271,8 @@ export default function MediaViewer({ type, src, title, artist, thumbnail, onClo
               <div className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 mx-auto mb-6 sm:mb-8">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-full blur-2xl" />
                 <div
-                  className={`relative w-full h-full rounded-full overflow-hidden border-4 border-white/10 shadow-xl ${isPlaying ? "animate-spin-slow" : ""}`}
+                  className="relative w-full h-full rounded-full overflow-hidden border-4 border-white/10 shadow-xl animate-spin-slow"
+                  style={{ animationPlayState: isPlaying ? "running" : "paused" }}
                 >
                   {thumbnail ? (
                     <img src={thumbnail || "/placeholder.svg"} alt={title} className="w-full h-full object-cover" />
@@ -302,7 +303,7 @@ export default function MediaViewer({ type, src, title, artist, thumbnail, onClo
                   <div className="mb-3 sm:mb-4">
                     <div
                       ref={progressBarRef}
-                      className="relative w-full h-6 sm:h-5 md:h-4 bg-white/20 rounded-full cursor-pointer group flex items-center"
+                      className="relative w-full h-6 sm:h-5 md:h-4 bg-white/20 rounded-full cursor-pointer group flex items-center overflow-hidden"
                       onClick={handleProgressClick}
                       onTouchStart={handleProgressTouch}
                       role="slider"
@@ -312,11 +313,11 @@ export default function MediaViewer({ type, src, title, artist, thumbnail, onClo
                       aria-valuenow={currentTime}
                     >
                       <div
-                        className="absolute top-1/2 -translate-y-1/2 left-0 h-2 sm:h-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full pointer-events-none"
+                        className="absolute top-0 left-0 h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full pointer-events-none transition-[width] duration-100 ease-linear"
                         style={{ width: `${progressPercent}%` }}
                       />
                       <div
-                        className="absolute top-1/2 -translate-y-1/2 w-5 h-5 sm:w-5 sm:h-5 bg-white rounded-full shadow-lg shadow-purple-500/50 pointer-events-none"
+                        className="absolute top-1/2 -translate-y-1/2 w-5 h-5 sm:w-5 sm:h-5 bg-white rounded-full shadow-lg shadow-purple-500/50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity"
                         style={{ left: `calc(${progressPercent}% - 10px)` }}
                       />
                     </div>

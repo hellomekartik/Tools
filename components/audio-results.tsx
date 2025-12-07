@@ -1,6 +1,6 @@
 "use client"
 
-import { Loader2, Play, Download } from "lucide-react"
+import { Loader2, Play, Download, Volume2 } from "lucide-react"
 import { useState } from "react"
 import MediaViewer from "./media-viewer"
 
@@ -43,7 +43,19 @@ export default function AudioResults({ audioData, loading, searchAttempted }: Au
   }
 
   if (!audioData) {
-    return null
+    return (
+      <div className="max-w-2xl mx-auto px-4 mb-12">
+        <div className="bg-white rounded-xl shadow-lg p-8 sm:p-12 border border-slate-200">
+          <div className="flex flex-col items-center justify-center text-center">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 flex items-center justify-center mb-4">
+              <Volume2 className="w-8 h-8 text-purple-500" />
+            </div>
+            <h3 className="text-xl font-semibold text-slate-900 mb-2">Ready to Convert</h3>
+            <p className="text-slate-500">Enter your text and select a voice to get started</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
