@@ -10,15 +10,15 @@ export async function GET(request: Request) {
   }
 
   try {
-    let apiUrl = `https://texttospeech.alphaapi.workers.dev/?text=${encodeURIComponent(text)}&type=${type}`
+    let apiUrl = ""
 
-    if (type === "google" && lang) {
-      apiUrl += `&lang=${lang}`
-    } else if (type === "streamelements" && voice) {
-      apiUrl += `&voice=${voice}`
+    if (type === "alpha") {
+      // Alpha TTS API
+      apiUrl = `https://yabes-api.pages.dev/api/tools/tts?text=${encodeURIComponent(text)}&voice=${voice || "adam"}`
+    } else {
+      // Google TTS (default)
+      apiUrl = `https://texttospeech.alphaapi.workers.dev/?text=${encodeURIComponent(text)}&type=google&lang=${lang}`
     }
-
-    console.log("[v0] Calling external API:", apiUrl)
 
     const response = await fetch(apiUrl)
 
@@ -26,16 +26,40 @@ export async function GET(request: Request) {
       throw new Error(`External API error: ${response.status}`)
     }
 
-    const audioBuffer = await response.arrayBuffer()
-    const audioUrl = `data:audio/mpeg;base64,${Buffer.from(audioBuffer).toString("base64")}`
+    if (type === "alpha") {
+      const data = await response.json()
 
-    return Response.json({
-      url: audioUrl,
-      text,
-      type,
-      voice,
-      lang,
-    })
+      const audioUrl =
+        data.result?.audio_url ||
+        data.result?.audio ||
+        data.audio_url ||
+        data.audio ||
+        data.url ||
+        (typeof data === "string" ? data : null)
+
+      if (audioUrl) {
+        return Response.json({
+          url: audioUrl,
+          text,
+          type,
+          voice,
+        })
+      } else {
+        throw new Error("No audio URL found in response")
+      }
+    } else {
+      // Google TTS returns audio buffer
+      const audioBuffer = await response.arrayBuffer()
+      const audioUrl = `data:audio/mpeg;base64,${Buffer.from(audioBuffer).toString("base64")}`
+
+      return Response.json({
+        url: audioUrl,
+        text,
+        type,
+        voice,
+        lang,
+      })
+    }
   } catch (error) {
     console.error("[v0] Error:", error)
     return Response.json({ error: "Failed to generate voice" }, { status: 500 })
