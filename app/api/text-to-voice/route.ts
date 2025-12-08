@@ -12,7 +12,18 @@ export async function GET(request: Request) {
   try {
     let apiUrl = ""
 
-    if (type === "alpha") {
+    if (type === "openai") {
+      // OpenAI TTS API - returns audio directly
+      apiUrl = `https://open-ai-tts-converter.vercel.app/?text=${encodeURIComponent(text)}&voice=${voice || "alloy"}`
+
+      // This API returns audio directly, so we just return the URL
+      return Response.json({
+        url: apiUrl,
+        text,
+        type,
+        voice,
+      })
+    } else if (type === "alpha") {
       // Alpha TTS API
       apiUrl = `https://yabes-api.pages.dev/api/tools/tts?text=${encodeURIComponent(text)}&voice=${voice || "adam"}`
     } else {

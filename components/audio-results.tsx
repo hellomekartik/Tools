@@ -74,8 +74,7 @@ export default function AudioResults({ audioData, loading, searchAttempted }: Au
                   <Play className="w-7 h-7 text-white ml-1" />
                 </button>
                 <div className="flex-1">
-                  <p className="font-medium text-slate-900 mb-1">Voice Generated</p>
-                  <p className="text-sm text-slate-600 line-clamp-2">{audioData.text}</p>
+                  <p className="font-medium text-slate-900">Generated Voice</p>
                 </div>
               </div>
             </div>

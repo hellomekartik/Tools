@@ -16,6 +16,7 @@ export default function TextToVoiceForm({ onSearch, loading, searchAttempted, on
   const [text, setText] = React.useState("")
   const [type, setType] = React.useState("google")
   const [voice, setVoice] = React.useState("adam")
+  const [openaiVoice, setOpenaiVoice] = React.useState("alloy")
   const [lang, setLang] = React.useState("en")
   const submitInProgressRef = React.useRef(false)
   const allowSubmitRef = React.useRef(false)
@@ -30,7 +31,9 @@ export default function TextToVoiceForm({ onSearch, loading, searchAttempted, on
     submitInProgressRef.current = true
     allowSubmitRef.current = false
     onSearchAttempt()
-    onSearch(text, type, voice, lang)
+
+    const selectedVoice = type === "openai" ? openaiVoice : voice
+    onSearch(text, type, selectedVoice, lang)
 
     setTimeout(() => {
       submitInProgressRef.current = false
@@ -52,6 +55,63 @@ export default function TextToVoiceForm({ onSearch, loading, searchAttempted, on
     { value: "es", label: "Spanish" },
     { value: "fr", label: "French" },
     { value: "de", label: "German" },
+  ]
+
+  const openaiVoices = [
+    {
+      value: "alloy",
+      label: "Alloy",
+      gender: "Female" as const,
+      accent: "American",
+      language: "English",
+      tone: "Neutral",
+      description: "Balanced and versatile voice, great for general use.",
+    },
+    {
+      value: "echo",
+      label: "Echo",
+      gender: "Male" as const,
+      accent: "American",
+      language: "English",
+      tone: "Deep",
+      description: "Deep and resonant male voice with rich tones.",
+    },
+    {
+      value: "fable",
+      label: "Fable",
+      gender: "Female" as const,
+      accent: "British",
+      language: "English",
+      tone: "Storytelling",
+      description: "Perfect for storytelling and narration.",
+    },
+    {
+      value: "onyx",
+      label: "Onyx",
+      gender: "Male" as const,
+      accent: "American",
+      language: "English",
+      tone: "Authoritative",
+      description: "Deep and powerful male voice with authority.",
+    },
+    {
+      value: "nova",
+      label: "Nova",
+      gender: "Female" as const,
+      accent: "American",
+      language: "English",
+      tone: "Modern",
+      description: "Modern and dynamic female voice.",
+    },
+    {
+      value: "shimmer",
+      label: "Shimmer",
+      gender: "Female" as const,
+      accent: "American",
+      language: "English",
+      tone: "Warm",
+      description: "Warm and expressive female voice.",
+    },
   ]
 
   const alphaTTSVoices = [
@@ -164,15 +224,6 @@ export default function TextToVoiceForm({ onSearch, loading, searchAttempted, on
       description: "Natural Icelandic female voice.",
     },
     {
-      value: "doras",
-      label: "Doras",
-      gender: "Female" as const,
-      accent: "European",
-      language: "English",
-      tone: "Professional",
-      description: "Clear European female voice.",
-    },
-    {
       value: "echo",
       label: "Echo",
       gender: "Male" as const,
@@ -225,15 +276,6 @@ export default function TextToVoiceForm({ onSearch, loading, searchAttempted, on
       language: "English",
       tone: "Professional",
       description: "Distinguished British male voice.",
-    },
-    {
-      value: "gongitsune",
-      label: "Gongitsune",
-      gender: "Male" as const,
-      accent: "Japanese",
-      language: "Japanese",
-      tone: "Traditional",
-      description: "Traditional Japanese male voice.",
     },
     {
       value: "heart",
@@ -326,42 +368,6 @@ export default function TextToVoiceForm({ onSearch, loading, searchAttempted, on
       description: "Authoritative American male voice.",
     },
     {
-      value: "nezumi",
-      label: "Nezumi",
-      gender: "Female" as const,
-      accent: "Japanese",
-      language: "Japanese",
-      tone: "Cute",
-      description: "Cute Japanese female voice.",
-    },
-    {
-      value: "nicola",
-      label: "Nicola",
-      gender: "Female" as const,
-      accent: "Italian",
-      language: "English",
-      tone: "Professional",
-      description: "Professional Italian female voice.",
-    },
-    {
-      value: "nicole",
-      label: "Nicole",
-      gender: "Female" as const,
-      accent: "Australian",
-      language: "English",
-      tone: "Friendly",
-      description: "Friendly Australian female voice.",
-    },
-    {
-      value: "noel",
-      label: "Noel",
-      gender: "Male" as const,
-      accent: "French",
-      language: "English",
-      tone: "Sophisticated",
-      description: "Sophisticated French male voice.",
-    },
-    {
       value: "nova",
       label: "Nova",
       gender: "Female" as const,
@@ -443,15 +449,6 @@ export default function TextToVoiceForm({ onSearch, loading, searchAttempted, on
       description: "Elegant British female voice.",
     },
     {
-      value: "siwis",
-      label: "Siwis",
-      gender: "Female" as const,
-      accent: "Swiss",
-      language: "German",
-      tone: "Clear",
-      description: "Clear Swiss German female voice.",
-    },
-    {
       value: "sky",
       label: "Sky",
       gender: "Female" as const,
@@ -459,87 +456,6 @@ export default function TextToVoiceForm({ onSearch, loading, searchAttempted, on
       language: "English",
       tone: "Youthful",
       description: "Youthful and energetic voice.",
-    },
-    {
-      value: "tebukuro",
-      label: "Tebukuro",
-      gender: "Male" as const,
-      accent: "Japanese",
-      language: "Japanese",
-      tone: "Gentle",
-      description: "Gentle Japanese male voice.",
-    },
-    {
-      value: "xiaobei",
-      label: "Xiaobei",
-      gender: "Female" as const,
-      accent: "Chinese",
-      language: "Chinese",
-      tone: "Natural",
-      description: "Natural Chinese female voice.",
-    },
-    {
-      value: "xiaoni",
-      label: "Xiaoni",
-      gender: "Female" as const,
-      accent: "Chinese",
-      language: "Chinese",
-      tone: "Sweet",
-      description: "Sweet Chinese female voice.",
-    },
-    {
-      value: "xiaoxiao",
-      label: "Xiaoxiao",
-      gender: "Female" as const,
-      accent: "Chinese",
-      language: "Chinese",
-      tone: "Professional",
-      description: "Professional Chinese female voice.",
-    },
-    {
-      value: "xiaoyi",
-      label: "Xiaoyi",
-      gender: "Female" as const,
-      accent: "Chinese",
-      language: "Chinese",
-      tone: "Friendly",
-      description: "Friendly Chinese female voice.",
-    },
-    {
-      value: "yunjian",
-      label: "Yunjian",
-      gender: "Male" as const,
-      accent: "Chinese",
-      language: "Chinese",
-      tone: "Strong",
-      description: "Strong Chinese male voice.",
-    },
-    {
-      value: "yunxi",
-      label: "Yunxi",
-      gender: "Male" as const,
-      accent: "Chinese",
-      language: "Chinese",
-      tone: "Natural",
-      description: "Natural Chinese male voice.",
-    },
-    {
-      value: "yunxia",
-      label: "Yunxia",
-      gender: "Female" as const,
-      accent: "Chinese",
-      language: "Chinese",
-      tone: "Warm",
-      description: "Warm Chinese female voice.",
-    },
-    {
-      value: "yunyang",
-      label: "Yunyang",
-      gender: "Male" as const,
-      accent: "Chinese",
-      language: "Chinese",
-      tone: "Professional",
-      description: "Professional Chinese male voice.",
     },
   ]
 
@@ -568,6 +484,7 @@ export default function TextToVoiceForm({ onSearch, loading, searchAttempted, on
           options={[
             { value: "google", label: "Google TTS" },
             { value: "alpha", label: "Alpha TTS" },
+            { value: "openai", label: "OpenAI TTS" },
           ]}
           disabled={loading}
           label="Voice Type"
@@ -586,6 +503,16 @@ export default function TextToVoiceForm({ onSearch, loading, searchAttempted, on
 
         {type === "alpha" && (
           <VoiceSelector value={voice} onChange={setVoice} voices={alphaTTSVoices} disabled={loading} label="Voice" />
+        )}
+
+        {type === "openai" && (
+          <VoiceSelector
+            value={openaiVoice}
+            onChange={setOpenaiVoice}
+            voices={openaiVoices}
+            disabled={loading}
+            label="Voice"
+          />
         )}
 
         <button
