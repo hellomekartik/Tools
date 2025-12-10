@@ -1,7 +1,7 @@
 "use client"
 
-import { DownloadIcon, AlertCircle, Music, Play } from "lucide-react"
-import { useState } from "react"
+import { DownloadIcon, AlertCircle, Music, Play, Loader2 } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
 import MediaViewer from "./media-viewer"
 
 interface TrackInfo {
@@ -25,6 +25,63 @@ interface SpotifyTrackInfoProps {
 export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload }: SpotifyTrackInfoProps) {
   const [downloading, setDownloading] = useState(false)
   const [showPlayer, setShowPlayer] = useState(false)
+  const [preloadedAudioBlob, setPreloadedAudioBlob] = useState<string | null>(null)
+  const [waitingForAudio, setWaitingForAudio] = useState(false)
+  const preloadAbortRef = useRef<AbortController | null>(null)
+
+  useEffect(() => {
+    if (trackInfo?.audio) {
+      if (preloadAbortRef.current) {
+        preloadAbortRef.current.abort()
+      }
+
+      preloadAbortRef.current = new AbortController()
+      setPreloadedAudioBlob(null)
+
+      const proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(trackInfo.audio)}`
+
+      fetch(proxyUrl, { signal: preloadAbortRef.current.signal })
+        .then((res) => res.blob())
+        .then((blob) => {
+          const blobUrl = URL.createObjectURL(blob)
+          setPreloadedAudioBlob(blobUrl)
+          if (waitingForAudio) {
+            setShowPlayer(true)
+            setWaitingForAudio(false)
+          }
+        })
+        .catch((err) => {
+          if (err.name !== "AbortError") {
+            console.error("Failed to preload audio:", err)
+          }
+          setWaitingForAudio(false)
+        })
+
+      return () => {
+        if (preloadAbortRef.current) {
+          preloadAbortRef.current.abort()
+        }
+      }
+    }
+  }, [trackInfo?.audio, waitingForAudio])
+
+  useEffect(() => {
+    return () => {
+      if (preloadedAudioBlob) {
+        URL.revokeObjectURL(preloadedAudioBlob)
+      }
+    }
+  }, [preloadedAudioBlob])
+
+  const handlePlayClick = () => {
+    if (preloadedAudioBlob) {
+      // Audio is ready, open player immediately
+      setShowPlayer(true)
+    } else {
+      // Audio not ready, show loading and wait
+      setWaitingForAudio(true)
+    }
+  }
 
   if (!trackInfo && !loading && !error) {
     return null
@@ -33,7 +90,7 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
   if (error) {
     return (
       <div className="max-w-2xl mx-auto px-4 mb-12">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 flex items-start gap-4">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 flex items-start gap-4">
           <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
           <div>
             <h3 className="font-semibold text-red-900 mb-1">Error</h3>
@@ -47,10 +104,10 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
   if (loading) {
     return (
       <div className="max-w-2xl mx-auto px-4 mb-12">
-        <div className="bg-white rounded-xl shadow-lg p-8 border border-slate-200">
+        <div className="bg-white rounded-2xl shadow-sm p-8 border border-slate-100">
           <div className="flex items-center justify-center gap-3">
-            <div className="w-6 h-6 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
-            <p className="text-slate-600 font-medium">Finding Track Information...</p>
+            <div className="w-5 h-5 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+            <p className="text-slate-500 font-medium">Finding Track...</p>
           </div>
         </div>
       </div>
@@ -88,10 +145,9 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
       link.click()
       document.body.removeChild(link)
 
-      // Clean up blob URL after download
       setTimeout(() => URL.revokeObjectURL(blobUrl), 1000)
     } catch (err) {
-      console.error("[v0] Download error:", err)
+      console.error("Download error:", err)
       window.open(trackInfo.audio, "_blank")
     } finally {
       setDownloading(false)
@@ -101,13 +157,11 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
   return (
     <>
       <div className="max-w-2xl mx-auto px-4 mb-12">
-        <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-slate-200">
-          <h3 className="text-2xl font-bold text-slate-900 mb-6">Track Information</h3>
-
+        <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border border-slate-100">
           <div className="flex flex-col md:flex-row gap-6">
             {/* Thumbnail */}
-            <div className="md:w-48 flex-shrink-0">
-              <div className="w-full aspect-square bg-slate-200 rounded-lg overflow-hidden flex items-center justify-center relative group">
+            <div className="md:w-44 flex-shrink-0">
+              <div className="w-full aspect-square bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center relative group">
                 {trackInfo.image ? (
                   <>
                     <img
@@ -120,17 +174,22 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
                     />
                     {trackInfo.audio && (
                       <button
-                        onClick={() => setShowPlayer(true)}
-                        className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                        onClick={handlePlayClick}
+                        disabled={waitingForAudio}
+                        className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
                       >
-                        <div className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center shadow-lg">
-                          <Play className="w-6 h-6 text-white ml-1" />
+                        <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center shadow-lg">
+                          {waitingForAudio ? (
+                            <Loader2 className="w-5 h-5 text-white animate-spin" />
+                          ) : (
+                            <Play className="w-5 h-5 text-white ml-0.5" />
+                          )}
                         </div>
                       </button>
                     )}
                   </>
                 ) : (
-                  <Music className="w-16 h-16 text-slate-400" />
+                  <Music className="w-14 h-14 text-slate-300" />
                 )}
               </div>
             </div>
@@ -139,34 +198,44 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
             <div className="flex-1 flex flex-col justify-center">
               <div className="space-y-4">
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-900">{trackInfo.title || "Unknown Title"}</h2>
-                  {trackInfo.artists && <p className="text-sm text-slate-600 mt-1">{trackInfo.artists}</p>}
+                  <h2 className="text-xl font-bold text-slate-900">{trackInfo.title || "Unknown Title"}</h2>
+                  {trackInfo.artists && <p className="text-sm text-slate-500 mt-1">{trackInfo.artists}</p>}
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex flex-col sm:flex-row gap-2">
                   {trackInfo.audio && (
                     <button
-                      onClick={() => setShowPlayer(true)}
-                      className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-500/25"
+                      onClick={handlePlayClick}
+                      disabled={waitingForAudio}
+                      className="flex-1 bg-green-500 hover:bg-green-600 disabled:bg-green-400 text-white font-medium py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
                     >
-                      <Play className="w-5 h-5" />
-                      Play Track
+                      {waitingForAudio ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          Loading...
+                        </>
+                      ) : (
+                        <>
+                          <Play className="w-4 h-4" />
+                          Play Track
+                        </>
+                      )}
                     </button>
                   )}
 
                   <button
                     onClick={handleDownload}
                     disabled={downloading || !trackInfo.audio}
-                    className="flex-1 bg-slate-800 hover:bg-slate-900 disabled:bg-slate-400 text-white font-semibold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
+                    className="flex-1 bg-slate-800 hover:bg-slate-900 disabled:bg-slate-300 text-white font-medium py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
                     {downloading ? (
                       <>
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                         Downloading...
                       </>
                     ) : (
                       <>
-                        <DownloadIcon className="w-5 h-5" />
+                        <DownloadIcon className="w-4 h-4" />
                         Download
                       </>
                     )}
@@ -182,6 +251,7 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
         <MediaViewer
           type="audio"
           src={trackInfo.audio}
+          preloadedBlob={preloadedAudioBlob}
           title={trackInfo.title}
           artist={trackInfo.artists}
           thumbnail={trackInfo.image}

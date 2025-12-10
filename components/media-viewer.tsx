@@ -21,6 +21,7 @@ import {
 interface MediaViewerProps {
   type: "image" | "audio" | "video" | "qr"
   src: string
+  preloadedBlob?: string | null // Accept preloaded blob
   title?: string
   artist?: string
   thumbnail?: string
@@ -28,7 +29,16 @@ interface MediaViewerProps {
   onDownload?: () => void
 }
 
-export default function MediaViewer({ type, src, title, artist, thumbnail, onClose, onDownload }: MediaViewerProps) {
+export default function MediaViewer({
+  type,
+  src,
+  preloadedBlob,
+  title,
+  artist,
+  thumbnail,
+  onClose,
+  onDownload,
+}: MediaViewerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
@@ -44,6 +54,13 @@ export default function MediaViewer({ type, src, title, artist, thumbnail, onClo
 
   useEffect(() => {
     if (type === "audio" && src) {
+      // If preloaded blob is available, use it immediately
+      if (preloadedBlob) {
+        setAudioBlob(preloadedBlob)
+        setIsLoading(false)
+        return
+      }
+
       setIsLoading(true)
 
       const proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(src)}`
@@ -62,12 +79,13 @@ export default function MediaViewer({ type, src, title, artist, thumbnail, onClo
         })
 
       return () => {
-        if (audioBlob && audioBlob.startsWith("blob:")) {
+        // Only revoke if we created it (not preloaded)
+        if (audioBlob && audioBlob.startsWith("blob:") && !preloadedBlob) {
           URL.revokeObjectURL(audioBlob)
         }
       }
     }
-  }, [type, src])
+  }, [type, src, preloadedBlob])
 
   const getMediaElement = useCallback(() => {
     if (type === "audio") return audioRef.current

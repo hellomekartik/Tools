@@ -8,7 +8,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Fetch the full audio file
     const response = await fetch(url, {
       headers: {
         "User-Agent":
@@ -32,11 +31,11 @@ export async function GET(request: NextRequest) {
         "Content-Type": contentType,
         "Content-Length": arrayBuffer.byteLength.toString(),
         "Accept-Ranges": "bytes",
-        "Cache-Control": "public, max-age=3600",
+        "Cache-Control": "public, max-age=86400, s-maxage=86400",
       },
     })
   } catch (error) {
-    console.error("[v0] Proxy audio error:", error)
+    console.error("Proxy audio error:", error)
     return NextResponse.json({ error: "Failed to proxy audio" }, { status: 500 })
   }
 }

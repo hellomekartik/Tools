@@ -61,20 +61,16 @@ export default function TextToImage() {
   }
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-cyan-50/20 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 right-20 w-96 h-96 bg-pink-300/30 rounded-full blur-3xl animate-float-gentle" />
+        <div className="absolute top-20 right-20 w-96 h-96 bg-blue-300/30 rounded-full blur-3xl animate-float" />
         <div
-          className="absolute bottom-20 left-20 w-80 h-80 bg-purple-300/25 rounded-full blur-3xl animate-float-slow"
+          className="absolute bottom-20 left-20 w-80 h-80 bg-cyan-300/25 rounded-full blur-3xl animate-float"
           style={{ animationDelay: "2s" }}
         />
         <div
-          className="absolute top-1/2 left-1/3 w-72 h-72 bg-violet-200/30 rounded-full blur-3xl animate-float-gentle"
+          className="absolute top-1/2 left-1/3 w-72 h-72 bg-indigo-200/30 rounded-full blur-3xl animate-float"
           style={{ animationDelay: "4s" }}
-        />
-        <div
-          className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-rose-200/25 rounded-full blur-3xl animate-float-slow"
-          style={{ animationDelay: "1s" }}
         />
       </div>
 

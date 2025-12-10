@@ -45,49 +45,49 @@ export default function Header({
   const renderHeaderIcon = () => {
     if (title === "Spotify Track Downloader") {
       return (
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg shadow-emerald-400/40 animate-glow-pulse">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-400 to-blue-500 flex items-center justify-center shadow-lg shadow-sky-400/40 animate-glow-pulse">
           <Music className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
     if (title === "Text to Video") {
       return (
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-lg shadow-violet-400/40 animate-glow-pulse">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-400/40 animate-glow-pulse">
           <Video className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
     if (title === "Text to Voice") {
       return (
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-400/40 animate-glow-pulse">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center shadow-lg shadow-cyan-400/40 animate-glow-pulse">
           <Volume2 className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
     if (title === "Text to Image") {
       return (
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center shadow-lg shadow-pink-400/40 animate-glow-pulse">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-400/40 animate-glow-pulse">
           <ImageIcon className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
     if (title === "Terabox Downloader") {
       return (
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-400/40 animate-glow-pulse">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center shadow-lg shadow-teal-400/40 animate-glow-pulse">
           <Download className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
     if (title === "Link to QR") {
       return (
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-400/40 animate-glow-pulse">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-400 to-blue-500 flex items-center justify-center shadow-lg shadow-indigo-400/40 animate-glow-pulse">
           <QrCode className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
     }
     if (title === "Translator") {
       return (
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-lg shadow-orange-400/40 animate-glow-pulse">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-teal-500 flex items-center justify-center shadow-lg shadow-cyan-400/40 animate-glow-pulse">
           <Languages className="w-6 h-6 text-white" strokeWidth={1.5} />
         </div>
       )
@@ -105,7 +105,7 @@ export default function Header({
       )
     }
     return (
-      <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-lg shadow-lg shadow-purple-400/40 animate-glow-pulse">
+      <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center text-lg shadow-lg shadow-blue-400/40 animate-glow-pulse">
         {headerEmoji}
       </div>
     )
@@ -115,8 +115,8 @@ export default function Header({
     <header
       className={`sticky top-0 z-40 transition-all duration-500 ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-xl border-b border-purple-100 shadow-lg shadow-purple-100/20"
-          : "bg-white/80 backdrop-blur-md border-b border-purple-50"
+          ? "bg-white/95 backdrop-blur-xl border-b border-blue-100 shadow-lg shadow-blue-100/20"
+          : "bg-white/80 backdrop-blur-md border-b border-blue-50"
       }`}
     >
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -124,7 +124,7 @@ export default function Header({
           {showBackButton && (
             <Link
               href="/"
-              className="p-2.5 hover:bg-purple-50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-purple-200/30"
+              className="p-2.5 hover:bg-blue-50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-200/30"
             >
               <ArrowLeft className="w-5 h-5 text-foreground" />
             </Link>
@@ -139,22 +139,22 @@ export default function Header({
         <div className="relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="p-2.5 hover:bg-purple-50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-purple-200/30"
+            className="p-2.5 hover:bg-blue-50 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-200/30"
           >
             <Menu className="w-5 h-5 text-foreground" />
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 mt-2 w-52 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-purple-200/40 border border-purple-100 overflow-hidden animate-fade-in-scale">
+            <div className="absolute right-0 mt-2 w-52 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-blue-200/40 border border-blue-100 overflow-hidden animate-fade-in-scale">
               {!hideSettings && (
                 <button
                   onClick={() => {
                     onSettingsClick()
                     setShowMenu(false)
                   }}
-                  className="w-full px-5 py-4 flex items-center gap-3 hover:bg-purple-50 transition-all duration-300 text-left group"
+                  className="w-full px-5 py-4 flex items-center gap-3 hover:bg-blue-50 transition-all duration-300 text-left group"
                 >
-                  <Settings className="w-5 h-5 text-purple-500 group-hover:animate-icon-float" />
+                  <Settings className="w-5 h-5 text-blue-500 group-hover:animate-icon-float" />
                   <span className="text-foreground font-medium">Settings</span>
                 </button>
               )}
@@ -163,9 +163,9 @@ export default function Header({
                   onAboutClick()
                   setShowMenu(false)
                 }}
-                className={`w-full px-5 py-4 flex items-center gap-3 hover:bg-purple-50 transition-all duration-300 text-left group ${!hideSettings ? "border-t border-purple-50" : ""}`}
+                className={`w-full px-5 py-4 flex items-center gap-3 hover:bg-blue-50 transition-all duration-300 text-left group ${!hideSettings ? "border-t border-blue-50" : ""}`}
               >
-                <Info className="w-5 h-5 text-purple-500 group-hover:animate-icon-float" />
+                <Info className="w-5 h-5 text-blue-500 group-hover:animate-icon-float" />
                 <span className="text-foreground font-medium">About</span>
               </button>
             </div>

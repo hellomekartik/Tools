@@ -70,7 +70,6 @@ export default function SpotifyDownloader() {
     setCameFromSearch(true)
 
     try {
-      console.log("[v0] Searching for:", query)
       const response = await fetch(`/api/spotify-search?q=${encodeURIComponent(query)}`)
 
       if (!response.ok) {
@@ -78,7 +77,6 @@ export default function SpotifyDownloader() {
       }
 
       const data = await response.json()
-      console.log("[v0] Search results received:", data)
 
       const results = data.tracks || data.results || data.data || []
       const formattedResults = (Array.isArray(results) ? results : []).map((track: any) => ({
@@ -95,7 +93,7 @@ export default function SpotifyDownloader() {
         setSearchResults(formattedResults)
       }
     } catch (err) {
-      console.error("[v0] Search error:", err)
+      console.error("Search error:", err)
       setError("Failed to search for tracks. Please try again.")
       setSearchResults([])
     } finally {
@@ -114,7 +112,6 @@ export default function SpotifyDownloader() {
     setTrackInfo(null)
 
     try {
-      console.log("[v0] Fetching track info for:", url)
       const response = await fetch(`/api/spotify-info?url=${encodeURIComponent(url)}`)
 
       if (!response.ok) {
@@ -150,11 +147,11 @@ export default function SpotifyDownloader() {
   }
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
-      <div className="absolute inset-0">
-        <div className="absolute top-20 right-20 w-96 h-96 bg-emerald-200/20 rounded-full blur-3xl animate-float-gentle" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-cyan-50/20 relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-20 right-20 w-96 h-96 bg-cyan-300/30 rounded-full blur-3xl animate-float" />
         <div
-          className="absolute bottom-20 left-20 w-80 h-80 bg-green-200/15 rounded-full blur-3xl animate-float-gentle"
+          className="absolute bottom-20 left-20 w-80 h-80 bg-blue-300/25 rounded-full blur-3xl animate-float"
           style={{ animationDelay: "2s" }}
         />
       </div>
@@ -174,10 +171,10 @@ export default function SpotifyDownloader() {
 
           {loading && loadingType === "track-info" && (
             <div className="max-w-2xl mx-auto px-4 mb-12">
-              <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl shadow-emerald-200/30 p-8 border border-border">
+              <div className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl shadow-blue-200/30 p-8 border border-blue-100/50">
                 <div className="flex items-center justify-center gap-3">
-                  <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
-                  <p className="text-muted-foreground font-medium">Finding Track Information...</p>
+                  <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                  <p className="text-slate-600 font-medium">Finding Track Information...</p>
                 </div>
               </div>
             </div>
@@ -199,7 +196,7 @@ export default function SpotifyDownloader() {
               {cameFromSearch && trackInfo && (
                 <button
                   onClick={handleBackToResults}
-                  className="mb-4 px-4 py-2 text-sm font-medium text-purple-600 hover:text-purple-700 transition-colors"
+                  className="mb-4 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
                 >
                   ← Back to Results
                 </button>

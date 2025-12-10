@@ -28,6 +28,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://all-downloader.itxkaal.workers.dev" />
+        <link rel="preconnect" href="https://svaradl.aculix.org" />
+        <link rel="preconnect" href="https://cdn-spotify-inter.zm.io.vn" />
+        <link rel="dns-prefetch" href="https://all-downloader.itxkaal.workers.dev" />
+        <link rel="dns-prefetch" href="https://svaradl.aculix.org" />
+        <link rel="dns-prefetch" href="https://cdn-spotify-inter.zm.io.vn" />
+      </head>
       <body className={`font-sans antialiased`}>
         {children}
         <Analytics />

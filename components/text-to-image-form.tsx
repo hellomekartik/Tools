@@ -28,7 +28,7 @@ export default function TextToImageForm({ onSearch, loading, searchAttempted, on
       <div className="text-center mb-10 animate-fade-in-up">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-pink-200/50 shadow-lg shadow-pink-200/20 mb-6 animate-glow-pulse">
           <Sparkles className="w-4 h-4 text-pink-500 animate-icon-float" />
-          <span className="text-sm font-medium text-foreground">AI Powered</span>
+          <span className="text-sm font-medium text-foreground">Text to Image</span>
         </div>
         <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-3 tracking-tight">
           Generate{" "}
