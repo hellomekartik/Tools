@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Volume2, ImageIcon, Download, QrCode, Music, Link2, Languages } from "lucide-react"
+import { Volume2, ImageIcon, QrCode, Music, Link2, Languages } from "lucide-react"
 import { useState, useEffect } from "react"
 
 export default function Home() {
@@ -39,14 +39,6 @@ export default function Home() {
       description: "Generate AI images",
       gradient: "from-teal-400 to-cyan-500",
       shadow: "shadow-teal-400/40",
-    },
-    {
-      href: "/terabox-downloader",
-      title: "Terabox Downloader",
-      icon: Download,
-      description: "Download Terabox files",
-      gradient: "from-green-400 to-emerald-500",
-      shadow: "shadow-green-400/40",
     },
     {
       href: "/link-to-qr",
@@ -105,7 +97,7 @@ export default function Home() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
               </span>
-              <span className="text-lg font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              <span className="text-lg font-semibold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent animate-neon-glow">
                 {currentTime || "..."}
               </span>
             </div>

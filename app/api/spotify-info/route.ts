@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const apiUrl = `https://all-downloader.itxkaal.workers.dev/?url=${encodeURIComponent(url)}`
+    const apiUrl = `https://spotify.anshapi.workers.dev/?url=${encodeURIComponent(url)}`
 
     const response = await fetch(apiUrl)
 

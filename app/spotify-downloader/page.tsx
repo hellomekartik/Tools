@@ -120,15 +120,21 @@ export default function SpotifyDownloader() {
 
       const data = await response.json()
 
-      const trackData = data.data || data
+      const trackData = data.data?.data || data.data || data
+
       setTrackInfo({
-        title: selectedTrack?.title || trackData.title || trackData.name || "Unknown Title",
-        artist: selectedTrack?.artists || trackData.artist || trackData.author || "Unknown Artist",
-        artists: selectedTrack?.artists || trackData.artist || trackData.author || "Unknown Artist",
-        album: trackData.album,
-        image: trackData.thumbnail || trackData.image || trackData.cover,
+        title: trackData.title || trackData.name || selectedTrackData?.title || "Unknown Title",
+        artist: trackData.author || trackData.artist || selectedTrackData?.artists || "Unknown Artist",
+        artists: trackData.author || trackData.artist || selectedTrackData?.artists || "Unknown Artist",
+        album: trackData.album || trackData.album_name,
+        image: trackData.thumbnail || trackData.image || trackData.cover || trackData.cover_url,
         url: trackData.url || url,
-        audio: trackData.download || trackData.audio || trackData.medias?.[0]?.url || trackData.url,
+        audio:
+          trackData.medias?.[0]?.url ||
+          trackData.download ||
+          trackData.audio ||
+          trackData.download_url ||
+          trackData.url,
       })
       setError(null)
     } catch (err) {

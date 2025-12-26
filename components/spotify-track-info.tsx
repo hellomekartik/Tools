@@ -27,6 +27,7 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
   const [showPlayer, setShowPlayer] = useState(false)
   const [preloadedAudioBlob, setPreloadedAudioBlob] = useState<string | null>(null)
   const [waitingForAudio, setWaitingForAudio] = useState(false)
+  const [isFetchingAudio, setIsFetchingAudio] = useState(false)
   const preloadAbortRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
@@ -40,11 +41,16 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
 
       const proxyUrl = `/api/proxy-audio?url=${encodeURIComponent(trackInfo.audio)}`
 
+      setIsFetchingAudio(true)
       fetch(proxyUrl, { signal: preloadAbortRef.current.signal })
-        .then((res) => res.blob())
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to fetch")
+          return res.blob()
+        })
         .then((blob) => {
           const blobUrl = URL.createObjectURL(blob)
           setPreloadedAudioBlob(blobUrl)
+          setIsFetchingAudio(false)
           if (waitingForAudio) {
             setShowPlayer(true)
             setWaitingForAudio(false)
@@ -53,8 +59,12 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
         .catch((err) => {
           if (err.name !== "AbortError") {
             console.error("Failed to preload audio:", err)
+            if (waitingForAudio) {
+              setShowPlayer(true)
+              setWaitingForAudio(false)
+            }
           }
-          setWaitingForAudio(false)
+          setIsFetchingAudio(false)
         })
 
       return () => {
@@ -75,47 +85,10 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
 
   const handlePlayClick = () => {
     if (preloadedAudioBlob) {
-      // Audio is ready, open player immediately
       setShowPlayer(true)
     } else {
-      // Audio not ready, show loading and wait
       setWaitingForAudio(true)
     }
-  }
-
-  if (!trackInfo && !loading && !error) {
-    return null
-  }
-
-  if (error) {
-    return (
-      <div className="max-w-2xl mx-auto px-4 mb-12">
-        <div className="bg-red-50 border border-red-200 rounded-xl p-6 flex items-start gap-4">
-          <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
-          <div>
-            <h3 className="font-semibold text-red-900 mb-1">Error</h3>
-            <p className="text-red-700">{error}</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (loading) {
-    return (
-      <div className="max-w-2xl mx-auto px-4 mb-12">
-        <div className="bg-white rounded-2xl shadow-sm p-8 border border-slate-100">
-          <div className="flex items-center justify-center gap-3">
-            <div className="w-5 h-5 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
-            <p className="text-slate-500 font-medium">Finding Track...</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (!trackInfo) {
-    return null
   }
 
   const handleDownload = async () => {
@@ -154,6 +127,41 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
     }
   }
 
+  if (!trackInfo && !loading && !error) {
+    return null
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 mb-12">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 flex items-start gap-4">
+          <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <h3 className="font-semibold text-red-900 mb-1">Error</h3>
+            <p className="text-red-700">{error}</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 mb-12">
+        <div className="bg-white rounded-2xl shadow-sm p-8 border border-slate-100">
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-5 h-5 border-2 border-green-500 border-t-transparent rounded-full animate-spin" />
+            <p className="text-slate-500 font-medium">Finding Track...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (!trackInfo) {
+    return null
+  }
+
   return (
     <>
       <div className="max-w-2xl mx-auto px-4 mb-12">
@@ -178,8 +186,8 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
                         disabled={waitingForAudio}
                         className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
                       >
-                        <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center shadow-lg">
-                          {waitingForAudio ? (
+                        <div className="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg">
+                          {waitingForAudio || isFetchingAudio ? (
                             <Loader2 className="w-5 h-5 text-white animate-spin" />
                           ) : (
                             <Play className="w-5 h-5 text-white ml-0.5" />
@@ -207,12 +215,12 @@ export default function SpotifyTrackInfo({ trackInfo, loading, error, onDownload
                     <button
                       onClick={handlePlayClick}
                       disabled={waitingForAudio}
-                      className="flex-1 bg-green-500 hover:bg-green-600 disabled:bg-green-400 text-white font-medium py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                      className="flex-1 bg-emerald-500 hover:bg-emerald-600 disabled:bg-emerald-400 text-white font-medium py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
                     >
                       {waitingForAudio ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin" />
-                          Loading...
+                          Loading Audio...
                         </>
                       ) : (
                         <>
