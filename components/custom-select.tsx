@@ -55,16 +55,18 @@ export default function CustomSelect({
       <button
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
-        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-slate-900 bg-white cursor-pointer flex items-center justify-between hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-slate-900 bg-white cursor-pointer flex items-center justify-between hover:border-emerald-300 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
       >
-        <span>{selectedOption?.label || "Select an option"}</span>
-        <ChevronDown className={`w-5 h-5 text-slate-600 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <span className="truncate">{selectedOption?.label || "Select..."}</span>
+        <ChevronDown
+          className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-300 rounded-lg shadow-lg z-50 overflow-hidden">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl border border-white rounded-2xl shadow-2xl z-[100] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
           {searchable && (
-            <div className="p-2 border-b border-slate-200 sticky top-0 bg-white">
+            <div className="p-2 border-b border-slate-100 sticky top-0 bg-white/50">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
@@ -72,15 +74,15 @@ export default function CustomSelect({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search language..."
-                  className="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  placeholder="Search..."
+                  className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
                 />
               </div>
             </div>
           )}
-          <div className="max-h-64 overflow-y-auto">
+          <div className="max-h-64 overflow-y-auto custom-scrollbar">
             {filteredOptions.length === 0 ? (
-              <div className="px-4 py-3 text-slate-500 text-center">No languages found</div>
+              <div className="px-4 py-8 text-slate-400 text-center text-sm">No results found</div>
             ) : (
               filteredOptions.map((option) => (
                 <button
@@ -90,11 +92,15 @@ export default function CustomSelect({
                     setIsOpen(false)
                     setSearchQuery("")
                   }}
-                  className={`w-full px-4 py-3 text-left hover:bg-orange-50 transition flex items-center gap-3 ${
-                    value === option.value ? "bg-orange-100 text-orange-900 font-semibold" : "text-slate-900"
+                  className={`w-full px-4 py-3 text-left hover:bg-emerald-50 transition-all duration-200 flex items-center gap-3 text-sm ${
+                    value === option.value
+                      ? "bg-emerald-50 text-emerald-700 font-bold"
+                      : "text-slate-600 hover:text-emerald-600"
                   }`}
                 >
-                  {value === option.value && <div className="w-2 h-2 bg-orange-500 rounded-full" />}
+                  {value === option.value && (
+                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                  )}
                   <span>{option.label}</span>
                 </button>
               ))

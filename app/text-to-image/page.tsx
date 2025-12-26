@@ -26,7 +26,7 @@ export default function TextToImage() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const handleSearch = async (prompt: string) => {
+  const handleSearch = async (prompt: string, options: any) => {
     if (!prompt.trim()) {
       return
     }
@@ -35,7 +35,15 @@ export default function TextToImage() {
     setSearchAttempted(true)
 
     try {
-      const apiUrl = `/api/text-to-image?prompt=${encodeURIComponent(prompt)}`
+      const { platform, model, style } = options
+      const queryParams = new URLSearchParams({
+        prompt,
+        platform,
+        model: model || "",
+        style: style || "",
+      })
+
+      const apiUrl = `/api/text-to-image?${queryParams.toString()}`
       const response = await fetch(apiUrl)
 
       if (!response.ok) {
